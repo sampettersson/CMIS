@@ -1,0 +1,52 @@
+{
+  "extends": "airbnb",
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "experimentalObjectRestSpread": true,
+      "modules": true
+    }
+  },
+  "env": {
+    "es6": true,
+    "node": true,
+    "browser": true,
+    "jasmine": true
+  },
+  "plugins": [
+    "react"
+  ],
+  "rules": {
+    "arrow-parens": ["error", "as-needed"],
+    "comma-dangle": ["error", "never"],
+    "consistent-return": 0,
+    "import/no-extraneous-dependencies": 0,
+    "import/no-unresolved": 0,
+    "import/prefer-default-export": 0,
+    "indent": [2, 2, { "SwitchCase": 1 }],
+    "jsx-a11y/label-has-for": 0,
+    "no-alert": 0,
+    "no-console": 0,
+    "no-else-return": 0,
+    "no-multiple-empty-lines": ["error", { "max": 1 }],
+    "no-param-reassign": 0,
+    "no-restricted-syntax": 0,
+    "quotes": [2, "double"],
+    "react/jsx-closing-bracket-location": 0,
+    "react/jsx-filename-extension": 0,
+    "react/jsx-no-bind": 0,
+    "react/jsx-uses-react": 1,
+    "react/no-did-mount-set-state": 1,
+    "react/no-did-update-set-state": 1,
+    "react/no-direct-mutation-state": 1,
+    "react/no-multi-comp": 1,
+    "react/no-string-refs": ["warn"],
+    "react/prefer-stateless-function": 1,
+    "react/prop-types": 0,
+    "react/require-extension": "off",
+    "semi": [2, "never"],
+    "no-underscore-dangle": 0
+  }
+}
