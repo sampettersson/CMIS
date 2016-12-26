@@ -1,4 +1,3 @@
-import { detach } from "./event.js"
 import fetchPages from "./fetch/pages"
 import fetchUsers from "./fetch/users"
 

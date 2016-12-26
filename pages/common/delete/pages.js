@@ -5,5 +5,6 @@ export default page => fetch("http://localhost:3001/api/pages", {
   headers: {
     "Content-Type": "application/json"
   },
-  body: JSON.stringify(page)
+  body: JSON.stringify(page),
+  credentials: "include"
 }).then(response => response.json())
