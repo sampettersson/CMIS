@@ -16,7 +16,7 @@ export default function secure(SecuredComponent, awaitables) {
 
       if (req && res) {
         insert(serverState, "req", req)
-        insert(serverState, "req", req)
+        insert(serverState, "res", res)
       }
 
       await awaitables.forEach(async (awaitable) => {
