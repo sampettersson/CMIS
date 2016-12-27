@@ -7,6 +7,8 @@ import Secure from "./common/utils/secure"
 import PageList from "./common/components/PageList"
 import NewPage from "./common/components/NewPage"
 
+import { waitForPages } from "./common/state"
+
 const Wrapper = styled.div`
   background: red;
 `
@@ -22,4 +24,4 @@ class Editor extends React.Component {
   }
 }
 
-export default Secure(Editor)
+export default Secure(Editor, [waitForPages])

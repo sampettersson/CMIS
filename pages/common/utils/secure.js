@@ -1,34 +1,40 @@
 import React, { Component } from "react"
-// TODO fix when next is fixed
-import Router from "next/dist/lib/router"
 
-import { fetchState, waitForPages, waitForUsers } from "../state"
+import {
+  fetchState,
+  fetchServerState,
+  insert,
+  waitForUsers } from "../state"
 import { dispatch } from "../event"
+import redirect from "./redirect"
 
-export default function secure(Page) {
+export default function secure(SecuredComponent, awaitables) {
   return class Secure extends Component {
     static async getInitialProps({ req, res }) {
-      if (req) {
-        fetchState().cookies = req.headers.cookie
+      const state = fetchState()
+      const serverState = fetchServerState()
+
+      if (req && res) {
+        insert(serverState, "req", req)
+        insert(serverState, "req", req)
       }
 
-      await waitForPages()
+      await awaitables.forEach(async (awaitable) => {
+        await awaitable()
+      })
+
       await waitForUsers()
 
-      if (!fetchState().users.length) {
-        if (res) {
-          return res.redirect("/login")
-        } else {
-          return Router.push("/login")
-        }
+      if (!state.users.length) {
+        return redirect("/login")
       }
 
-      return { pages: fetchState().pages }
+      return { state: state }
     }
 
     render() {
       return (
-        <Page {...this.props} />
+        <SecuredComponent {...this.props.state} />
       )
     }
   }
