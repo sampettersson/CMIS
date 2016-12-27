@@ -1,6 +1,16 @@
 import Mongoose, { Schema } from "mongoose"
 Mongoose.connect("mongodb://localhost/cmis")
 
+const toModelInstance = model => obj => {
+  if (obj._id) {
+    return obj
+  }
+
+  const modelInstance = new instance[model](obj)
+  modelInstance.save()
+  return modelInstance._id
+}
+
 class Db {
   User = Mongoose.model("User", {
     username: {
@@ -30,12 +40,16 @@ class Db {
 	      message: "url need's to be a valid url"
       }
     },
-    versions: [Schema.Types.ObjectId],
+    versions: [{
+      type: Schema.Types.ObjectId,
+      set: toModelInstance("PageVersion")
+    }],
     currentVersion: Schema.Types.ObjectId
   })
 
   PageVersion = Mongoose.model("PageVersion", {
-    published: { type: Date, default: Date.now },
+    published: Boolean,
+    created: { type: Date, default: Date.now },
     components: [Schema.Types.ObjectId]
   })
 
@@ -50,4 +64,6 @@ class Db {
   })
 }
 
-export default new Db()
+const instance = new Db()
+
+export default instance
