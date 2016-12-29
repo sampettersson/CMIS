@@ -8,11 +8,9 @@ import components from "./components"
 
 import { fetchPage } from "./common/fetch/pages"
 
-export default class extends React.Component {
-  state = {
-    version: null
-  }
+import { attach } from "./common/event"
 
+export default class extends React.Component {
   static async getInitialProps({ req, query }) {
     let pathname = ""
 
@@ -24,14 +22,28 @@ export default class extends React.Component {
 
     const page = await fetchPage(pathname)
 
-    return { page: page, query: query }
+    return { page, query }
+  }
+
+  state = {
+    version: null
   }
 
   componentWillMount() {
-    this.state.version = this.props.page.versions.filter(
-      version => version._id == this.props.query.version
-    )[0]
+    this.setState({ version: this.getVersion(this.props.query.version) })
   }
+
+  componentDidMount() {
+    attach("ChangeVersion", this.changeVersion)
+  }
+
+  getVersion = targetId =>
+    this.props.page.versions.filter(
+      version => version._id === targetId
+    )[0]
+
+  changeVersion = versionId =>
+    this.setState({ version: this.getVersion(versionId) })
 
   render() {
     return (
