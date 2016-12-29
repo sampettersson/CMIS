@@ -3,7 +3,7 @@ import Router from "next/dist/lib/router"
 
 import { fetchServerState } from "../state"
 
-export default (target) => {
+export default target => {
   const { res } = fetchServerState()
 
   if (res) {

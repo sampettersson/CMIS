@@ -1,4 +1,5 @@
 import Mongoose, { Schema } from "mongoose"
+
 Mongoose.connect("mongodb://localhost/cmis")
 
 const toModelInstance = model => obj => {
@@ -36,8 +37,8 @@ class Db {
       required: true,
       minlength: 1,
       validate: {
-        validator: (value) => value.substring(0, 1) === "/",
-	      message: "url need's to be a valid url"
+        validator: value => value.substring(0, 1) === "/",
+        message: "url need's to be a valid url"
       }
     },
     versions: [{
