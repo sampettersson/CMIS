@@ -20,6 +20,7 @@ const app = Express()
 const proxy = HttpProxy.createProxyServer({ target: Config.next })
 
 const next = Next("../", { dev: true })
+
 const nextHandle = next.getRequestHandler()
 
 app.use(BodyParser.json())
@@ -40,15 +41,17 @@ app.post("/api/components", Components.post)
 
 app.all("/__webpack_hmr", (req, res) => proxy.web(req, res))
 
-app.get("*", (req, res) => {
-  const { pathname, query } = parse(req.url, true)
+next.prepare().then(() => {
+  app.get("*", (req, res) => {
+    const { pathname, query } = parse(req.url, true)
 
-  Db.Page.findOne({ url: pathname }).then(page => {
-    if (page) {
-      next.render(req, res, '/page', query)
-    } else {
-      nextHandle(req, res)
-    }
+    Db.Page.findOne({ url: pathname }).then(page => {
+      if (page) {
+        next.render(req, res, "/page", query)
+      } else {
+        nextHandle(req, res)
+      }
+    })
   })
 })
 
