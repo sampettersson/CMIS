@@ -3,7 +3,7 @@ import bcrypt from "bcrypt-nodejs"
 import Db from "./db"
 
 class Auth {
-  post(req, res) {
+  post = (req, res) => {
     const onSuccess = user => {
       req.session.user = user.toJSON()
       res.json(user.toJSON())
@@ -15,8 +15,11 @@ class Auth {
       }
 
       bcrypt.compare(req.body.password, user.password, (err, same) => {
-        same && onSuccess(user)
-        !same && res.json("Password didn't match", 401)
+        if (same) {
+          onSuccess(user)
+        } else {
+          res.json("Password didn't match", 401)
+        }
       })
     })
   }

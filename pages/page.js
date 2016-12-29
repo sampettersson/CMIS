@@ -1,5 +1,4 @@
 import React from "react"
-import styled from "styled-components"
 import { parse } from "url"
 
 import Head from "./common/head"
@@ -52,8 +51,8 @@ export default class extends React.Component {
         <PageEditor page={this.props.page} />
 
         {this.state.version && this.state.version.components.map((component, index) => {
-          const _componentToRender = components[component.name]
-          return <_componentToRender key={index} />
+          const componentToRender = components[component.name]
+          return <componentToRender key={index} />
         })}
 
         <div>

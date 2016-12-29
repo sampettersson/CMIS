@@ -1,7 +1,7 @@
 import Db from "./db"
 
 class Pages {
-  get(req, res) {
+  get = (req, res) => {
     const url = req.query.url
 
     if (url) {
@@ -20,22 +20,22 @@ class Pages {
     }
   }
 
-  post(req, res) {
+  post = (req, res) => {
     Db.Page(req.body)
     .save()
     .then(page => res.json(page))
     .catch(error => res.json(error, 400))
   }
 
-  put(req, res) {
+  put = (req, res) => {
     Db.Page
     .findOne({ _id: req.body._id })
     .then(page => {
       delete req.body.__v
-      
+
       Object
       .keys(req.body)
-      .forEach(key => page[key] = req.body[key])
+      .forEach(key => { page[key] = req.body[key] })
 
       page
       .save()
@@ -44,7 +44,7 @@ class Pages {
     })
   }
 
-  delete(req, res) {
+  delete = (req, res) => {
     Db.Page
     .remove({ _id: req.body._id })
     .then(result => res.json(result))

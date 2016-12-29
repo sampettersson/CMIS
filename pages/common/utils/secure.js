@@ -5,7 +5,6 @@ import {
   fetchServerState,
   insert,
   waitForUsers } from "../state"
-import { dispatch } from "../event"
 import redirect from "./redirect"
 
 export default function secure(SecuredComponent, awaitables) {
@@ -19,7 +18,7 @@ export default function secure(SecuredComponent, awaitables) {
         insert(serverState, "res", res)
       }
 
-      await awaitables.forEach(async (awaitable) => {
+      await awaitables.forEach(async awaitable => {
         await awaitable()
       })
 
@@ -29,7 +28,7 @@ export default function secure(SecuredComponent, awaitables) {
         return redirect("/login")
       }
 
-      return { state: state }
+      return { state }
     }
 
     render() {

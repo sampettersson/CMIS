@@ -2,7 +2,7 @@ import bcrypt from "bcrypt-nodejs"
 
 import Db from "./db"
 
-const hashUserPassword = function (next) {
+function hashUserPassword(next) {
   if (!isNaN(bcrypt.getRounds(this.password))) {
     return next()
   }
@@ -13,10 +13,13 @@ const hashUserPassword = function (next) {
   })
 }
 
-const checkUserUniqueNess = function (next) {
+function checkUserUniqueNess(next) {
   Db.User.find({ username: this.username }).then(users => {
-    users.length && next(new Error("Username not unique"))
-    !users.length && next()
+    if (users.length) {
+      next(new Error("Username not unique"))
+    } else {
+      next()
+    }
   })
 }
 
@@ -32,13 +35,13 @@ Db.User.schema.set("toJSON", {
 })
 
 class Users {
-  get(req, res) {
+  get = (req, res) => {
     const user = req.session.user
     const userId = user && user._id
     Db.User.find({ _id: userId }).then(users => res.json(users))
   }
 
-  post(req, res) {
+  post = (req, res) => {
     Db.User(req.body)
     .save()
     .then(user => res.json(user))

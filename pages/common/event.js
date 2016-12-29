@@ -11,7 +11,9 @@ export const attach = (type, subscriber) => {
 }
 
 export const dispatch = (type, payload) => {
-  subscribers[type] && subscribers[type].forEach(subscriber => subscriber(payload))
+  if (subscribers[type]) {
+    subscribers[type].forEach(subscriber => subscriber(payload))
+  }
 }
 
 export const detach = (type, subscriber) => {

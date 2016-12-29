@@ -12,16 +12,11 @@ import { waitForPages } from "./common/state"
 const Wrapper = styled.div`
   background: red;
 `
-class Editor extends React.Component {
-  render() {
-    return (
-      <Wrapper>
-        <Head title="Welcome" />
-        <PageList initialPages={this.props.pages} />
-        <NewPage />
-      </Wrapper>
-    )
-  }
-}
+const Editor = props =>
+  <Wrapper>
+    <Head title="Welcome" />
+    <PageList initialPages={props.pages} />
+    <NewPage />
+  </Wrapper>
 
 export default Secure(Editor, [waitForPages])

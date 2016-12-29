@@ -8,13 +8,8 @@ const Wrapper = styled.div`
   background: green;
 `
 
-export default class extends React.Component {
-  render() {
-    return (
-      <Wrapper>
-        <Head title="Login into CMIS" />
-        <LoginForm />
-      </Wrapper>
-    )
-  }
-}
+export default () =>
+  <Wrapper>
+    <Head title="Login into CMIS" />
+    <LoginForm />
+  </Wrapper>

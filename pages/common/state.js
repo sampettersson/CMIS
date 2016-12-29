@@ -14,9 +14,9 @@ const serverState = {
 export const fetchState = () => state
 export const fetchServerState = () => serverState
 
-export const insert = (state, key, value) => {
-  state[key] = value
+export const insert = (whichState, key, value) => {
+  whichState[key] = value
 }
 
-export const waitForPages = async () => await fetchPages().then(pages => state.pages = pages)
-export const waitForUsers = async () => await fetchUsers().then(users => state.users = users)
+export const waitForPages = async () => await fetchPages().then(pages => { state.pages = pages })
+export const waitForUsers = async () => await fetchUsers().then(users => { state.users = users })

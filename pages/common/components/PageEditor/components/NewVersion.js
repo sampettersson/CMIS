@@ -14,7 +14,7 @@ export default class extends React.Component {
       components: lastVersion ? lastVersion.components : []
     })
 
-    putPage(page).then(page => dispatch("PageVersionCreated"))
+    putPage(page).then(() => dispatch("PageVersionCreated"))
   }
 
   render() {
