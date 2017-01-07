@@ -13,7 +13,7 @@
     "http-proxy": "^1.16.2",
     "isomorphic-fetch": "^2.2.1",
     "mongoose": "^4.7.1",
-    "next": "2.0.0-beta.5",
+    "next": "2.0.0-beta.16",
     "styled-components": "^1.1.2",
     "url-regex": "^4.0.0"
   },
