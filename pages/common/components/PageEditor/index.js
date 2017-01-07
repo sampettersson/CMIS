@@ -6,6 +6,7 @@ import { fetchPage } from "../../fetch/pages"
 
 import NewVersion from "./components/NewVersion"
 import VersionList from "./components/VersionList"
+import ComponentsList from "./components/ComponentsList"
 
 const Wrapper = styled.div`
   background: white;
@@ -36,8 +37,11 @@ export default class extends React.Component {
     return (
       <Wrapper>
         <p>Versions:</p>
-        <VersionList page={this.state.page} />
+        <VersionList page={this.state.page} version={this.props.version} />
         <NewVersion page={this.state.page} />
+
+        <p>Components:</p>
+        <ComponentsList version={this.props.version} />
       </Wrapper>
     )
   }

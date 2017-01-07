@@ -6,22 +6,31 @@ import PageEditor from "./common/components/PageEditor/index"
 import components from "./components"
 
 import { fetchPage } from "./common/fetch/pages"
+import fetchUsers from "./common/fetch/users"
+
+import {
+  fetchServerState,
+  insert } from "./common/state"
 
 import { attach } from "./common/event"
 
 export default class extends React.Component {
   static async getInitialProps({ req, query }) {
+    const serverState = fetchServerState()
+
     let pathname = ""
 
     if (req) {
       pathname = parse(req.url, true).pathname
+      insert(serverState, "req", req)
     } else {
       pathname = window.location.pathname
     }
 
     const page = await fetchPage(pathname)
+    const users = await fetchUsers()
 
-    return { page, query }
+    return { page, query, isAuthenticated: users.length !== 0 }
   }
 
   state = {
@@ -29,12 +38,22 @@ export default class extends React.Component {
   }
 
   componentWillMount() {
-    this.setState({ version: this.getVersion(this.props.query.version) })
+    if (this.props.isAuthenticated) {
+      const version = this.getVersion(this.props.query.version) || this.props.page.versions[0]
+      this.setState({ version })
+    } else {
+      this.setState({ version: this.getPublishedVersion() })
+    }
   }
 
   componentDidMount() {
     attach("ChangeVersion", this.changeVersion)
   }
+
+  getPublishedVersion = () =>
+    this.props.page.versions.filter(
+      version => version.published === true
+    )[0]
 
   getVersion = targetId =>
     this.props.page.versions.filter(
@@ -48,7 +67,9 @@ export default class extends React.Component {
     return (
       <div>
         <Head title={this.props.page.name} />
-        <PageEditor page={this.props.page} />
+        {this.props.isAuthenticated &&
+          <PageEditor page={this.props.page} version={this.state.version} />
+        }
 
         {this.state.version && this.state.version.components.map((component, index) => {
           const componentToRender = components[component.name]

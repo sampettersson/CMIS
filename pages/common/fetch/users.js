@@ -3,4 +3,4 @@ import config from "../../../config"
 
 import { getFetchOptions } from "../utils/fetch"
 
-export default () => fetch(`${config.api}/api/users`, getFetchOptions()).then(response => response.json())
+export default () => fetch(`${config.api}/api/users`, getFetchOptions("GET")).then(response => response.json())
