@@ -2,12 +2,29 @@ import Mongoose, { Schema } from "mongoose"
 
 Mongoose.connect("mongodb://localhost/cmis")
 
-const toModelInstance = model => obj => {
+export const updateModelInstance = (updatedObject, target) => {
+  delete updatedObject.__v
+
+  Object
+  .keys(updatedObject)
+  .forEach(key => {
+    if (typeof target[key] === typeof {}) {
+      updateModelInstance(updatedObject[key], target[key])
+    }
+
+    target[key] = updatedObject[key]
+  })
+
+  return target
+}
+
+export const toModelInstance = model => obj => {
   if (obj._id) {
     return obj
   }
 
-  const modelInstance = new instance[model](obj)
+  const Model = Mongoose.model(model)
+  const modelInstance = new Model(obj)
   modelInstance.save()
   return modelInstance._id
 }
@@ -65,6 +82,4 @@ class Db {
   })
 }
 
-const instance = new Db()
-
-export default instance
+export default new Db()

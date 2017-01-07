@@ -1,4 +1,4 @@
-import Db from "./db"
+import Db, { updateModelInstance } from "./db"
 
 class Pages {
   get = (req, res) => {
@@ -6,7 +6,7 @@ class Pages {
 
     if (url) {
       Db.Page
-      .findOne({ url: url })
+      .findOne({ url })
       .populate({
         path: "versions",
         model: "PageVersion"
@@ -31,11 +31,7 @@ class Pages {
     Db.Page
     .findOne({ _id: req.body._id })
     .then(page => {
-      delete req.body.__v
-
-      Object
-      .keys(req.body)
-      .forEach(key => { page[key] = req.body[key] })
+      updateModelInstance(req.body, page)
 
       page
       .save()
