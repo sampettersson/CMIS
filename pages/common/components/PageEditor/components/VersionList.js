@@ -1,14 +1,21 @@
 import React from "react"
+import styled from "styled-components"
 
 import { dispatch } from "../../../event"
+
+const ListItem = styled.li`
+  backgroundColor: ${props => props.selected && "red"}
+`
 
 export default props =>
   <ul>
     {props.page.versions.map(version =>
-      <li key={version._id} style={{ backgroundColor: props.version._id === version._id && "red" }}>
+      <ListItem
+        selected={version._id === props.version._id}
+        key={version._id}>
         <button onClick={() => { dispatch("ChangeVersion", version._id) }}>
           {version.created}
         </button>
-      </li>
+      </ListItem>
     )}
   </ul>
