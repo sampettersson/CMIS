@@ -9,7 +9,11 @@ class Pages {
       .findOne({ url })
       .populate({
         path: "versions",
-        model: "PageVersion"
+        model: "PageVersion",
+        populate: {
+          path: "components",
+          model: "Component"
+        }
       })
       .then(pages => res.json(pages))
     } else {

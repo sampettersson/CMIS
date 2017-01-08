@@ -33,8 +33,13 @@ export default class extends React.Component {
     return { page, query, isAuthenticated: users.length !== 0 }
   }
 
-  state = {
-    version: null
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      page: this.props.page,
+      version: null
+    }
   }
 
   componentWillMount() {
@@ -48,6 +53,8 @@ export default class extends React.Component {
 
   componentDidMount() {
     attach("ChangeVersion", this.changeVersion)
+    attach("PageVersionCreated", this.refreshPage)
+    attach("PageVersionUpdated", this.refreshPage)
   }
 
   getPublishedVersion = () =>
@@ -60,6 +67,9 @@ export default class extends React.Component {
       version => version._id === targetId
     )[0]
 
+  refreshPage = async () =>
+    this.setState({ page: await fetchPage(this.state.page.url) })
+
   changeVersion = versionId =>
     this.setState({ version: this.getVersion(versionId) })
 
@@ -67,14 +77,17 @@ export default class extends React.Component {
     return (
       <div>
         <Head title={this.props.page.name} />
+
         {this.props.isAuthenticated &&
           <PageEditor page={this.props.page} version={this.state.version} />
         }
 
         {this.state.version && this.state.version.components.map((component, index) => {
-          const componentToRender = components[component.name]
-          return <componentToRender key={index} />
+          const ComponentToRender = components[component.name]
+          return <ComponentToRender key={index} />
         })}
+
+        {!this.state.version && <p>Not Found!</p>}
 
         <div>
           Website running on <a href="https://github.com/sampettersson/CMIS">CMIS</a>.

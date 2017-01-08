@@ -1,12 +1,10 @@
 import React from "react"
 import styled from "styled-components"
 
-import { attach } from "../../event"
-import { fetchPage } from "../../fetch/pages"
-
 import NewVersion from "./components/NewVersion"
 import VersionList from "./components/VersionList"
 import ComponentsList from "./components/ComponentsList"
+import NewComponent from "./components/NewComponent"
 
 const Wrapper = styled.div`
   background: white;
@@ -15,34 +13,13 @@ const Wrapper = styled.div`
   right: 0;
 `
 
-export default class extends React.Component {
-  constructor(props) {
-    super(props)
+export default props =>
+  <Wrapper>
+    <p>Versions:</p>
+    <VersionList page={props.page} version={props.version} />
+    <NewVersion page={props.page} />
 
-    this.state = {
-      page: this.props.page
-    }
-  }
-
-  componentDidMount() {
-    attach("PageVersionCreated", this.refreshPage)
-  }
-
-  refreshPage = async () => {
-    const page = await fetchPage(this.state.page.url)
-    this.setState({ page })
-  }
-
-  render() {
-    return (
-      <Wrapper>
-        <p>Versions:</p>
-        <VersionList page={this.state.page} version={this.props.version} />
-        <NewVersion page={this.state.page} />
-
-        <p>Components:</p>
-        <ComponentsList version={this.props.version} />
-      </Wrapper>
-    )
-  }
-}
+    <p>Components:</p>
+    <ComponentsList version={props.version} />
+    <NewComponent page={props.page} version={props.version} />
+  </Wrapper>

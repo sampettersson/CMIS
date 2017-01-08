@@ -8,10 +8,6 @@ export const updateModelInstance = (updatedObject, target) => {
   Object
   .keys(updatedObject)
   .forEach(key => {
-    if (typeof target[key] === typeof {}) {
-      updateModelInstance(updatedObject[key], target[key])
-    }
-
     target[key] = updatedObject[key]
   })
 
@@ -19,14 +15,26 @@ export const updateModelInstance = (updatedObject, target) => {
 }
 
 export const toModelInstance = model => obj => {
+  const Model = Mongoose.model(model)
+
   if (obj._id) {
+    // there is surely a better solution for this :(
+    Model.findOne({ _id: obj._id }).then(foundObj => {
+      Object
+      .keys(obj)
+      .forEach(key => {
+        foundObj[key] = obj[key]
+      })
+
+      foundObj.save()
+    })
+
     return obj
   }
 
-  const Model = Mongoose.model(model)
   const modelInstance = new Model(obj)
   modelInstance.save()
-  return modelInstance._id
+  return modelInstance
 }
 
 class Db {
@@ -68,7 +76,10 @@ class Db {
   PageVersion = Mongoose.model("PageVersion", {
     published: Boolean,
     created: { type: Date, default: Date.now },
-    components: [Schema.Types.ObjectId]
+    components: [{
+      type: Schema.Types.ObjectId,
+      set: toModelInstance("Component")
+    }]
   })
 
   Component = Mongoose.model("Component", {
